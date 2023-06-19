@@ -101,13 +101,13 @@ function ViewCitation() {
 
         }}>
           {favori ? <StarBorderIcon style={{ color: '#6203AD', marginRight: '5px' }}></StarBorderIcon> : ''}
-          <Typography style={{
+          {citation == null ? '' : <Typography style={{
             color: '#6203AD',
             fontSize: '21px',
             fontFamily: 'Inter',
             textDecoration: 'underline',
             fontWeight: 'bold'
-          }} onClick={handleFavori} >Mettre en favoris</Typography>
+          }} onClick={handleFavori} >Mettre en favoris</Typography>}
         </div>
       </div>
       <div style={{ margin: '41px' }}>

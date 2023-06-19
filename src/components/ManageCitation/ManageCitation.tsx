@@ -18,9 +18,9 @@ function ManageCitation() {
   const [change, setChange] = useState(true)
   const [open, setOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const [mode, setMode] = useState('');
   const [citationId, setCitationId] = useState(null)
 
+  const [filteredCitiation, setFilteredCitiation] = useState<any[]>([]);
 
 
   useEffect(() => {
@@ -32,6 +32,8 @@ function ManageCitation() {
 
         const jsonData = (data.data);
         setAllCitation(jsonData)
+        setFilteredCitiation(jsonData);
+
       })
       .catch(error => {
         console.log(error)
@@ -40,6 +42,15 @@ function ManageCitation() {
     fetchData();
   }, [change]);
 
+
+  const filterCitiation = (query: string) => {
+    const filtered = allCitiation.filter(
+      (citation) =>
+        citation.citation.toLowerCase().includes(query.toLowerCase()) ||
+        citation.author.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredCitiation(filtered);
+  };
 
   const handleOpen = (id: any) => {
     setCitationId(id)
@@ -52,6 +63,10 @@ function ManageCitation() {
 
   const handleInputChange = (event: any) => {
     setInputValue(event.target.value);
+  };
+
+  const handleInputSearch = (event: any) => {
+    filterCitiation(event.target.value)
   };
 
   const handleSubmit = () => {
@@ -106,7 +121,7 @@ function ManageCitation() {
         justifyContent: 'center',
         alignItems: 'center'
       }}>
-        <Button style={{ background: '#6203AD', borderRadius: '15px', padding: '16px 16px 16px 16px', marginRight: '17px' }} onClick={() => handleOpen('new')}>
+        <Button style={{ background: '#6203AD', borderRadius: '15px', padding: '16px 16px 16px 16px', marginRight: '17px' }} onClick={() => handleOpen(null)}>
           <Typography style={{
             color: 'white',
             fontSize: '21px',
@@ -118,13 +133,15 @@ function ManageCitation() {
           sx={{ border: '2px solid #6203AD', borderRadius: 1, height: '9vh', width: '805px' }}
           disableUnderline
           placeholder=' Rechercher dans mes citations'
+          onChange={handleInputSearch}
+
 
         />
 
       </div>
       <div>
         <List sx={{ marginTop: '20px' }}>
-          {allCitiation == null ? '' : allCitiation.map((citation: any) => (
+          {filteredCitiation == null ? '' : filteredCitiation.map((citation: any) => (
             <ListItem key={citation.id} style={{ borderBottom: '1px solid grey', borderTop: '1px solid grey', backgroundColor: '#EBEBEE', display: 'flex', justifyContent: 'center', alignItems: 'center' }}  >
               <ListItemText primary={citation.citation} />
               <div>
