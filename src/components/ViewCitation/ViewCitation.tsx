@@ -9,17 +9,19 @@ import { setUncaughtExceptionCaptureCallback } from 'process';
 
 
 function ViewCitation() {
-
+  const [favori, setFavori] = useState<any>(null)
   const [citation, setCitation] = useState(null);
   const [author, setAuthor] = useState(null);
   const [date, setDate] = useState(null);
+  const [id, setId] = useState(null);
 
-
+  useEffect(() => { }, [favori])
   const handleCitationKammellot = async () => {
     await axios.get('https://kaamelott.chaudie.re/api')
       .then(data => {
         const jsonData = (data.data);
-        setCitation(jsonData.citation)
+        setCitation(jsonData.citation.citation)
+
 
 
       })
@@ -33,9 +35,24 @@ function ViewCitation() {
     await axios.get('http://localhost:5000/citation/random')
       .then(data => {
         const jsonData = (data.data);
+        setId(jsonData.id)
         setCitation(jsonData.citation)
         setAuthor(jsonData.author)
         setDate(jsonData.createdAt)
+        setFavori(jsonData.favori == undefined ? null : jsonData.favori)
+      })
+      .catch(error => {
+        console.log(error)
+      });
+
+  };
+
+  const handleFavori = () => {
+    axios.put('http://localhost:5000/citation/favori', { favori: !favori, citationId: id })
+      .then(data => {
+        const jsonData = (data.data);
+        console.log(jsonData[0])
+        setFavori(!favori)
       })
       .catch(error => {
         console.log(error)
@@ -83,14 +100,14 @@ function ViewCitation() {
           alignItems: 'center',
 
         }}>
-          <StarBorderIcon style={{ color: '#6203AD', marginRight: '5px' }}></StarBorderIcon>
+          {favori ? <StarBorderIcon style={{ color: '#6203AD', marginRight: '5px' }}></StarBorderIcon> : ''}
           <Typography style={{
             color: '#6203AD',
             fontSize: '21px',
             fontFamily: 'Inter',
             textDecoration: 'underline',
             fontWeight: 'bold'
-          }}>Mettre en favoris</Typography>
+          }} onClick={handleFavori} >Mettre en favoris</Typography>
         </div>
       </div>
       <div style={{ margin: '41px' }}>
