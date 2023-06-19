@@ -1,24 +1,22 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { Button, Divider, Icon, Input, InputAdornment, TextField } from '@mui/material';
+
+
+import ViewCitation from './components/ViewCitation/ViewCitation';
+import ManageCitation from './components/ManageCitation/ManageCitation';
 
 function App() {
   return (
+
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <ViewCitation />
+
+      <Divider color="#AAA9AB" variant="fullWidth" orientation="horizontal" style={
+        { margin: '60px' }
+      }></Divider>
+
+      <ManageCitation></ManageCitation>
     </div>
   );
 }
